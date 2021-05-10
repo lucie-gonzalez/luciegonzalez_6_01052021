@@ -1,24 +1,21 @@
-const jwt = require('jsonwebtoken');
+//Import du package jsonwebtoken pour créer un token d'identification
+//pour chaque utilisateur connecté et authentifié
+const jwt = require("jsonwebtoken");
 
-//////////////////// AUTHENTIFICATION AVEC UN TOKEN ////////////////////
-module.exports = (req, res, next) => {
-  try {
-    // Récupérer le Token après l'espace
-    const token = req.headers.authorization.split(' ')[1];
-    // Vérifier le token
-    const decodedToken = jwt.verify(token, 'RANDOM_TOKEN_SECRET');
-    // Récupérer l'Id de l'utilisateur du token vérifié
-    const userId = decodedToken.userId;
-
-    // Vérifier si l'Id correspond au Token
-    if (req.body.userId && req.body.userId !== userId) {
-      throw 'Invalid user ID';
-    } else {
-      next();
+//Ce middleware permettra de protéger les routes sélectionnées
+//et permettra de vérifier que l'utilisateur est authentifié
+//avant d'autoriser l'envoi de requêtes
+module.exports = function(req, res, next){
+    try{
+        const token = req.headers.authorization.split(" ")[1];
+        const decodedToken = jwt.verify(token, "RANDOM_TOKEN_SECRET");
+        const userId = decodedToken.userId;
+        if (req.body.userId && req.body.userId !== userId){
+            throw "User ID non valable !";
+        }else{
+            next();
+        }
+    }catch(error){
+        res.status(401).json({ error: error | "Requête non authentifiée !"});
     }
-  } catch {
-    res.status(401).json({
-      error: new Error('Invalid request!')
-    });
-  }
 };

@@ -1,55 +1,60 @@
-  
-const bcrypt = require('bcrypt');
+//Import du package de chiffrement bcrypt
+//pour chiffrer et créer un hash des mots de passe utilisateur
+const bcrypt = require("bcrypt");
+//Import du package jsonwebtoken pour créer un token d'identification
+//pour chaque utilisateur connecté et authentifié
+const jwt = require("jsonwebtoken");
 
-const jwt = require('jsonwebtoken');
-const MaskData = require('maskdata');
-const user = require('../models/user');
+//Import du modèle user
+const User = require("../models/User");
 
-//masquage e-mail
-const emailMask2Options = {
-  maskWith: "*", 
-  unmaskedStartCharactersBeforeAt: 5,
-  unmaskedEndCharactersAfterAt: 5,
-  maskAtTheRate: false
+//Middleware pour l'inscription d'un utilisateur
+exports.signUp = function (req, res, next) {
+    bcrypt.hash(req.body.password, 10)
+        .then(function(hash){
+            const user = new User({
+                email: req.body.email,
+                password: hash
+            });
+            user.save()
+                .then(function(){
+                    res.status(201).json({ message: "Utilisateur créé !" });
+                })
+                .catch(function(error){
+                    res.status(400).json({ error });
+                });
+        })
+        .catch(function(error){
+            res.status(500).json({ error });
+        });
 };
 
-exports.signup = (req, res, next) => {
-  const maskedEmail = MaskData.maskEmail2(req.body.email, emailMask2Options);
-    bcrypt.hash(req.body.password, 10)
-      .then(hash => {
-        const user = new User({
-          email: maskedEmail,
-          password: hash
-        });
-        user.save()
-          .then(() => res.status(201).json({ message: 'Utilisateur créé !' }))
-          .catch(error => res.status(400).json({ error:error.message }));
-      })
-      .catch(error => res.status(500).json({ error }));
-  };
-
-  exports.login = (req, res, next) => {
-    const maskedEmail = MaskData.maskEmail2(req.body.email, emailMask2Options);
-    User.findOne({ email: maskedEmail })
-      .then(user => {
-        if (!user) {
-          return res.status(401).json({ error: 'Utilisateur non trouvé !' });
-        }
-        bcrypt.compare(req.body.password, user.password)
-          .then(valid => {
-            if (!valid) {
-              return res.status(401).json({ error: 'Mot de passe incorrect !' });
+//Middleware pour la connexion d'un utilisateur
+exports.login = function (req, res, next) {
+    User.findOne({ email: req.body.email })
+        .then(function(user){
+            if(!user){
+                return res.status(401).json({ error : "Utilisateur non trouvé !"});
             }
-            res.status(200).json({
-              userId: user._id,
-              token: jwt.sign(
-                { userId: user._id },
-                'TOKEN',
-                { expiresIn: '24h' }
-                )
-              });
-            })
-          .catch(error => res.status(500).json({ error }));
-      })
-      .catch(error => res.status(500).json({ error }));
-  };
+            bcrypt.compare(req.body.password, user.password)
+                .then(function(valid){
+                    if(!valid){
+                        return res.status(401).json({ error : "Mot de passe incorrect !"});
+                    }
+                    res.status(200).json({
+                        userId: user._id,
+                        token: jwt.sign(
+                            { userId: user._id },
+                            "RANDOM_TOKEN_SECRET",
+                            { expiresIn: "24h" }
+                        )
+                    });
+                })
+                .catch(function(error){
+                    res.status(500).json({ error });
+                });
+        })
+        .catch(function(error){
+            res.status(500).json({ error });
+        });
+};
