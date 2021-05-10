@@ -19,8 +19,11 @@ const saucesRoutes = require("./routes/sauces");
 //Import du router des utilisateurs
 const userRoutes = require("./routes/user");
 
+// Variables d'environnement - masque les informations de logins
+require('dotenv').config();
+
 //Connexion de l'application à la base de données MongoDB
-    mongoose.connect('mongodb+srv://openclassroom:imth3dStWaHpVc3@sauce.3plzk.mongodb.net/Sauce?retryWrites=true&w=majority',
+    mongoose.connect(process.env.DB_MONGODBCONNECT,
     {
         useNewUrlParser: true,
         useUnifiedTopology: true,
