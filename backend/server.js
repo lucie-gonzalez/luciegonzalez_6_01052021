@@ -1,3 +1,5 @@
+// SERVEUR DE L'APPLICATION
+
 //Import de Node.js
 const http = require("http");
 //Import de l'application Express dans le serveur

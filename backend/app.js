@@ -21,8 +21,9 @@ const userRoutes = require("./routes/user");
 // Variables d'environnement - masque les informations de logins
 require('dotenv').config();
 
+
 //Connexion de l'application à la base de données MongoDB
-mongoose.connect( process.env.DB_MONGODBCONNECT,
+    mongoose.connect("mongodb+srv://" + process.env.DB_MONGODBCONNECT ,
     {
         useNewUrlParser: true,
         useUnifiedTopology: true,
@@ -35,10 +36,11 @@ mongoose.connect( process.env.DB_MONGODBCONNECT,
         console.log('Connexion à MongoDB échouée !');
     });
 
+
 //Création d'une application Express
 const app = express();
 
-//Le middleware de l'application
+
 
 //Ce middleware gère les erreurs de CORS : Cross Origin Resource Sharing.
 //Il résoud les problèmes de communication entre des serveurs
@@ -65,4 +67,4 @@ app.use("/api/sauces", saucesRoutes);
 app.use("/api/auth", userRoutes);
 
 //Export de l'application Express
-module.exports = app;
+module.exports = app; 

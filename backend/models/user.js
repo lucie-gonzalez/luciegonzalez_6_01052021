@@ -1,4 +1,3 @@
-  
 //Import du package Mongoose pour faciliter les interactions
 //avec la BDD MongoDB
 const mongoose = require("mongoose");
@@ -17,4 +16,4 @@ const userSchema = mongoose.Schema({
 userSchema.plugin(uniqueValidator);
 
 //Export du modèle utilisateur
-module.exports = mongoose.model("User", userSchema);
+module.exports = mongoose.model("User", userSchema); 

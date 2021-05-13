@@ -1,3 +1,4 @@
+
 //Import du modèle de sauce
 const Sauce = require("../models/Sauce");
 //Import du file system
@@ -38,6 +39,7 @@ exports.modifySauce = function (req, res, next) {
         });
 };
 
+
 //Middleware pour supprimer une sauce
 exports.deleteSauce = function (req, res, next) {
     Sauce.findOne({ _id: req.params.id })
@@ -58,6 +60,7 @@ exports.deleteSauce = function (req, res, next) {
         });
 };
 
+
 //Middleware pour récupérer une sauce à l'aide de son identifiant
 exports.getOneSauce = function (req, res, next) {
     Sauce.findOne({ _id: req.params.id })
@@ -69,6 +72,7 @@ exports.getOneSauce = function (req, res, next) {
         });
 };
 
+
 //Middleware pour récupérer toutes les sauces
 exports.getAllSauces = function (req, res, next) {
     Sauce.find()
@@ -79,6 +83,7 @@ exports.getAllSauces = function (req, res, next) {
             res.status(400).json({ error });
         });
 };
+
 
 //Middleware pour liker ou disliker une sauce
 exports.likeOneSauce = function (req, res, next) {

@@ -1,3 +1,4 @@
+
 //Import du package jsonwebtoken pour créer un token d'identification
 //pour chaque utilisateur connecté et authentifié
 const jwt = require("jsonwebtoken");

@@ -23,4 +23,4 @@ const storage = multer.diskStorage({
 });
 
 //Export de la configuration du multer
-module.exports = multer({ storage }).single("image");
+module.exports = multer({ storage }).single("image"); 

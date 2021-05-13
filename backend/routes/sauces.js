@@ -10,6 +10,7 @@ const auth = require("../middleware/auth");
 //Import du middleware pour la gestion des images
 const multer = require("../middleware/multer-config");
 
+
 //Les différentes routes avec leur endpoints pour les sauces
 router.get("/", auth, sauceCtrl.getAllSauces);
 router.get("/:id", auth, sauceCtrl.getOneSauce);
