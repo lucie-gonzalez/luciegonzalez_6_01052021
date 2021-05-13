@@ -116,14 +116,14 @@ exports.likeOneSauce = function (req, res, next) {
                 dislikes: userDislike,
                 _id: sauceId
             })
-                .then(function () {
+                .then(function () {     
                     res.status(200).json({ message: "Sauce modifiée." });
                 })
                 .catch(function (error) {
-                    res.status(400).json({ error });
+                    if (res.status(400).json({ error }));
+                    throw new Error ("erreurs");
                 });
         })
-        .catch(function (error) {
-            res.status(404).json({ error });
-        });
+        .catch( () => res.status(404).json({ error: 'sauce not found' 
+        }));
 };
