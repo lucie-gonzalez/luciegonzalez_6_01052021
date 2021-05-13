@@ -1,4 +1,3 @@
-
 //Import du framework Express
 const express = require("express");
 
@@ -13,9 +12,6 @@ const mongoose = require("mongoose");
 //Import du path de Node
 const path = require("path");
 
-// Installation de Helmet qui configure de manière appropriée des en-têtes HTTP liés à la sécurité
-const helmet = require('helmet'); 
-
 //Import du router des sauces
 const saucesRoutes = require("./routes/sauces");
 
@@ -26,7 +22,7 @@ const userRoutes = require("./routes/user");
 require('dotenv').config();
 
 //Connexion de l'application à la base de données MongoDB
-    mongoose.connect("mongodb+srv://" + process.env.DB_MONGODBCONNECT,
+mongoose.connect( process.env.DB_MONGODBCONNECT,
     {
         useNewUrlParser: true,
         useUnifiedTopology: true,

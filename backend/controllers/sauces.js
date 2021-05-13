@@ -1,4 +1,3 @@
-
 //Import du modèle de sauce
 const Sauce = require("../models/Sauce");
 //Import du file system
@@ -116,14 +115,14 @@ exports.likeOneSauce = function (req, res, next) {
                 dislikes: userDislike,
                 _id: sauceId
             })
-                .then(function () {     
+                .then(function () {
                     res.status(200).json({ message: "Sauce modifiée." });
                 })
                 .catch(function (error) {
-                    if (res.status(400).json({ error }));
-                    throw new Error ("erreurs");
+                    res.status(400).json({ error });
                 });
         })
-        .catch( () => res.status(404).json({ error: 'sauce not found' 
-        }));
+        .catch(function (error) {
+            res.status(404).json({ error });
+        });
 };

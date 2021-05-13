@@ -1,3 +1,4 @@
+  
 //Import du package Mongoose pour faciliter les interactions
 //avec la BDD MongoDB
 const mongoose = require("mongoose");
@@ -9,8 +10,7 @@ const uniqueValidator = require("mongoose-unique-validator");
 //Création du modèle User
 const userSchema = mongoose.Schema({
     email: { type: String, required: true, unique: true },
-    password: { type: String, required: true },
-    userId: { type: String, required: false}
+    password: { type: String, required: true }
 });
 
 //Application du plugin Mongoose Unique Validator au modèle utilisateur
