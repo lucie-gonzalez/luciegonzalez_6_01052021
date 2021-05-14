@@ -1,6 +1,9 @@
 // Création d un token pour gérer l'authentification  
 const jwt = require('jsonwebtoken'); 
 
+// sécurisation des données sensibles en les enregistrant dans un fichier .env
+require('dotenv').config()
+
 // Objet JSON encodé envoyé à un client qui s'est authentifié avec succès
 
 //Ce middleware permettra de protéger les routes sélectionnées

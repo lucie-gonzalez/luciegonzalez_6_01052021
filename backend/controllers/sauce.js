@@ -1,6 +1,8 @@
 const Sauce = require('../models/Sauce');
-const fs = require('fs'); // « file system » Donne accès aux fonctions qui nous permettent de modifier le système de fichiers, y compris aux fonctions permettant de supprimer les fichiers.
 
+// « file system » Donne accès aux fonctions qui nous permettent de modifier le système de fichiers, 
+//y compris aux fonctions permettant de supprimer les fichiers.
+const fs = require('fs'); 
 
 // Méthode POST
 exports.createSauce = (req, res, next) => {
@@ -50,11 +52,16 @@ exports.definedStatusSauce = (req, res, next) => {
 
 // Méthode get() pour répondre uniquement aux demandes GET; 
 // Nous utilisons deux-points : en face du segment dynamique de la route pour la rendre accessible en tant que paramètre
-
 exports.getOneSauce = (req, res, next) => {
-    Sauce.findOne({ _id: req.params.id }) // méthode findOne() dans notre modèle sauce pour trouver la sauce unique ayant le même _id que le paramètre de la requête ; 
-        .then(sauce => res.status(200).json(sauce)) // cette sauce est ensuite retourné dans une Promise et envoyé au front-end ;
-        .catch(error => res.status(404).json({ error })) // si aucune sauce n'est trouvé ou si une erreur se produit, nous envoyons une erreur 404 au front-end, avec l'erreur générée.
+
+// méthode findOne() dans notre modèle sauce pour trouver la sauce unique ayant le même _id que le paramètre de la requête ; 
+    Sauce.findOne({ _id: req.params.id }) 
+
+// cette sauce est ensuite retourné dans une Promise et envoyé au front-end ;
+        .then(sauce => res.status(200).json(sauce)) 
+
+ // si aucune sauce n'est trouvé ou si une erreur se produit, nous envoyons une erreur 404 au front-end, avec l'erreur générée.
+        .catch(error => res.status(404).json({ error })) 
 }
 
 // Route qui répond aux requêtes PUT (pour modifier un objet) 
@@ -64,14 +71,15 @@ exports.modifySauce = (req, res, next) => {
             ...JSON.parse(req.body.sauce),
             imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
         } : { ...req.body };
-    Sauce.updateOne({ _id: req.params.id }, { ...sauceObject, _id: req.params.id }) // méthode updateOne() dans le modèle sauce . Permet de mettre à jour le sauce qui correspond à l'objet que nous passons comme premier argument. Nous utilisons aussi le paramètre id passé dans la demande et le remplaçons par la sauce passé comme second argument.
+
+// méthode updateOne() dans le modèle sauce . Permet de mettre à jour la sauce
+    Sauce.updateOne({ _id: req.params.id }, { ...sauceObject, _id: req.params.id }) 
         .then(() => res.status(200).json({ message: 'Objet modifié !' }))
         .catch(error => res.status(400).json({ error }));
 };
 
 
 // Route DELETE qui permets de supprimer un élément
-
 exports.deleteSauce = (req, res, next) => {
     Sauce.findOne({ _id: req.params.id })
         .then(sauce => {
@@ -85,10 +93,10 @@ exports.deleteSauce = (req, res, next) => {
         .catch(error => res.status(500).json({ error }));
 };
 
-//route GET : nous utilisons la méthode find() dans notre modèle Mongoose afin de renvoyer un tableau contenant tous les sauces dans notre base de données.
-
-exports.getAllSauce = (req, res, next) => {
+//route GET 
+exports.getAllSauces = (req, res, next) => {
     Sauce.find()
         .then(sauces => res.status(200).json(sauces))
         .catch(error => res.status(400).json({ error }));
+        
 }
