@@ -1,70 +1,53 @@
-//Import du framework Express
-const express = require("express");
+const express = require('express');
+const app = express();
+const bodyParser = require('body-parser'); 
+const mongoose = require('mongoose'); // Facilite les intéractions avec la BDD
+const path = require('path'); // Donne accès au chemin de notre système de fichier
+const helmet = require('helmet'); // Installation de Helmet qui configure de manière appropriée des en-têtes HTTP liés à la sécurité
 
-//Import du package body-parser pour traiter l'objet JSON
-//envoyé par le frontend
-const bodyParser = require("body-parser");
+// sécurisation des données sensibles en les enregistrant dans un fichier .env
+require('dotenv').config()
 
-//Import du package Mongoose pour faciliter les interactions
-//avec la BDD MongoDB
-const mongoose = require("mongoose");
+const sauceRoutes = require('./routes/sauces');
+const userRoutes = require('./routes/user');
 
-//Import du path de Node
-const path = require("path");
+// Utilisation de Helmet
+app.use(helmet());
 
-//Import du router des sauces
-const saucesRoutes = require("./routes/sauces");
-
-//Import du router des utilisateurs
-const userRoutes = require("./routes/user");
-
-// Variables d'environnement - masque les informations de logins
-require('dotenv').config();
-
-
-//Connexion de l'application à la base de données MongoDB
+// Je connecte la base de donnée MongoDB 
     mongoose.connect("mongodb+srv://" + process.env.DB_MONGODBCONNECT ,
     {
         useNewUrlParser: true,
         useUnifiedTopology: true,
         useCreateIndex: true
-    })
-    .then(function () {
-        console.log('Connexion à MongoDB réussie !');
-    })
-    .catch(function () {
-        console.log('Connexion à MongoDB échouée !');
-    });
+
+    }).then(() => console.log('Connexion à MongoDB réussie !'))
+    .catch(() => console.log('Connexion à MongoDB échoué !'));
 
 
-//Création d'une application Express
-const app = express();
+//autorisation d acces à l'API
 
-
-
-//Ce middleware gère les erreurs de CORS : Cross Origin Resource Sharing.
-//Il résoud les problèmes de communication entre des serveurs
-//différents comme le port 3000 pour notre serveur et le port de l'application
-app.use(function (req, res, next) {
-    res.setHeader("Access-Control-Allow-Origin", "*");
-    res.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content, Accept, Content-Type, Authorization");
-    res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, PATCH, OPTIONS");
+app.use((req, res, next) => {
+    res.setHeader('Access-Control-Allow-Origin', '*'); // accéder à API depuis le port 4200
+    res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content, Accept, Content-Type, Authorization'); // ajouter les headers mentionnés aux requêtes envoyées vers notre API
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS'); // envoyer des requêtes avec les méthodes mentionnées
     next();
 });
 
-//Transforme l'objet JSON envoyé par le frontend pour pouvoir l'exploiter
+// indique à Express qu'il faut gérer la ressource images de manière statique 
+
+app.use('/images', express.static(path.join(__dirname, 'images')));
+
+//défininition de la fonction json comme middleware global pour l'application
+
 app.use(bodyParser.json());
 
-//Service du dossier images pour les récupérer
-app.use("/images", express.static(path.join(__dirname, "images")));
 
-//Enregistrement du router pour toutes les requêtes
-//ayant l'endpoint api/sauces
-app.use("/api/sauces", saucesRoutes);
+//enregistrement du routeur pour toutes les demandes faites vers /api/sauces
 
-//Enregistrement du router pour toutes les requêtes
-//ayant l'endpoint api/auth
-app.use("/api/auth", userRoutes);
+app.use('/api/sauces', sauceRoutes);
+app.use('/api/auth', userRoutes);
 
-//Export de l'application Express
-module.exports = app; 
+
+
+module.exports = app;

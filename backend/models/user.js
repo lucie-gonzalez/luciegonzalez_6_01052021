@@ -1,19 +1,12 @@
-//Import du package Mongoose pour faciliter les interactions
-//avec la BDD MongoDB
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
+const uniqueValidator = require('mongoose-unique-validator'); //plug-in qui empêche d'utiliser plusieurs fois la même adresse email
 
-//Import du package Mongoose Unique Validator
-//permettant qu'une adresse mail ne soit utilisée qu'une seule fois
-const uniqueValidator = require("mongoose-unique-validator");
-
-//Création du modèle User
 const userSchema = mongoose.Schema({
-    email: { type: String, required: true, unique: true },
-    password: { type: String, required: true }
+    email: { type: String, required: true, unique: true},
+    password: { type: String, required: true},
+    userId: { type: String, required: false}
 });
 
-//Application du plugin Mongoose Unique Validator au modèle utilisateur
 userSchema.plugin(uniqueValidator);
 
-//Export du modèle utilisateur
-module.exports = mongoose.model("User", userSchema); 
+module.exports = mongoose.model('User', userSchema);

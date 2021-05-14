@@ -1,16 +1,9 @@
-
-//Import du framework Express
-const express = require("express");
-//Création d'un router
+const express = require('express');
 const router = express.Router();
 
-//Import du middleware pour un utilisateur
-const userCtrl = require("../controllers/user");
+const userCtrl = require('../controllers/user');
 
+router.post('/signup', userCtrl.signup);
+router.post('/login', userCtrl.login);
 
-//Les différentes routes avec leur endpoints pour les utilisateurs
-router.post("/signup", userCtrl.signUp);
-router.post("/login", userCtrl.login);
-
-//Export du router pour les utilisateurs
 module.exports = router;
