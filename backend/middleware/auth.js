@@ -1,8 +1,11 @@
-  
-const jwt = require('jsonwebtoken'); // Création d un token pour gérer l'authentification
+// Création d un token pour gérer l'authentification  
+const jwt = require('jsonwebtoken'); 
 
 // Objet JSON encodé envoyé à un client qui s'est authentifié avec succès
 
+//Ce middleware permettra de protéger les routes sélectionnées
+//et permettra de vérifier que l'utilisateur est authentifié
+//avant d'autoriser l'envoi de requêtes
 module.exports = (req, res, next) => {
   try {
     const token = req.headers.authorization.split(' ')[1];

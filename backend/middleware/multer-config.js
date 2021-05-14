@@ -1,12 +1,15 @@
-  
-const multer = require('multer'); // Permets de gérer les fichiers entrants dans les requêtes HTTP
+// Permets de gérer les fichiers entrants dans les requêtes HTTP  
+const multer = require('multer'); 
 
+//Dictionnaire des différents types d'images
 const MIME_TYPES = {
   'image/jpg': 'jpg',
   'image/jpeg': 'jpg',
   'image/png': 'png'
 };
 
+//Constante permettant l'enregistrement des fichiers images
+//dans le dossier image
 const storage = multer.diskStorage({
   destination: (req, file, callback) => {
     callback(null, 'images');
@@ -18,5 +21,6 @@ const storage = multer.diskStorage({
   }
 });
 
+//Export de la configuration du multer
 module.exports = multer({storage: storage}).single('image');
 

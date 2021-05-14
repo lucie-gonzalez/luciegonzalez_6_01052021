@@ -1,15 +1,23 @@
   
+//Import du package de chiffrement bcrypt
+//pour chiffrer et créer un hash des mots de passe utilisateur
 const bcrypt = require('bcrypt');
+
+//Import du package jsonwebtoken pour créer un token d'identification
+//pour chaque utilisateur connecté et authentifié
 const jwt = require('jsonwebtoken');
+
+//Import du modèle user
 const User = require('../models/User');
+
 require('dotenv').config();
-// appel de la fonction de hachage de bcrypt dans notre mot de passe et  « salage » du mot de passe 10 fois. Plus la valeur est élevée, plus l'exécution de la fonction sera longue, et plus le hachage sera sécurisé. 
 
 // Il s'agit d'une fonction asynchrone qui renvoie une Promise dans laquelle nous recevons le hash généré
 
 // creation d un utilisateur et enregistrement dans la base de données, en renvoyant une réponse de réussite en cas de succès, et des erreurs avec le code d'erreur en cas d'échec.
 // La fonction User.updateOne permets de récupérer l'id renvoyer par la BDD et de le sauvegarder dans la BDD
 
+//Middleware pour l'inscription d'un utilisateur
 exports.signup = (req, res, next) => {
     bcrypt.hash(req.body.password, 10)
         .then(hash => {
@@ -32,7 +40,7 @@ exports.signup = (req, res, next) => {
 };
 
 
-
+//Middleware pour la connexion d'un utilisateur
 exports.login = (req, res, next) => {
     User.findOne({ email: req.body.email })
         .then(user => {

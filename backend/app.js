@@ -1,9 +1,19 @@
+//Import du framework Express
 const express = require('express');
 const app = express();
-const bodyParser = require('body-parser'); 
-const mongoose = require('mongoose'); // Facilite les intéractions avec la BDD
-const path = require('path'); // Donne accès au chemin de notre système de fichier
-const helmet = require('helmet'); // Installation de Helmet qui configure de manière appropriée des en-têtes HTTP liés à la sécurité
+
+//Import du package body-parser pour traiter l'objet JSON
+//envoyé par le frontend
+const bodyParser = require('body-parser');
+
+// Facilite les intéractions avec la BDD 
+const mongoose = require('mongoose'); 
+
+// Donne accès au chemin de notre système de fichier
+const path = require('path'); 
+
+// Installation de Helmet qui configure de manière appropriée des en-têtes HTTP liés à la sécurité
+const helmet = require('helmet'); 
 
 // sécurisation des données sensibles en les enregistrant dans un fichier .env
 require('dotenv').config()
