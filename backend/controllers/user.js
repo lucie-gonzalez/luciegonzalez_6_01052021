@@ -7,10 +7,21 @@ const bcrypt = require('bcrypt');
 //pour chaque utilisateur connecté et authentifié
 const jwt = require('jsonwebtoken');
 
+//import de maskdata qui va masquer le mail dans la base de donnée
+const MaskData = require('maskdata');
+
 //Import du modèle user
 const User = require('../models/User');
 
 require('dotenv').config();
+
+//masquage e-mail
+const emailMask2Options = {
+    maskWith: "*", 
+    unmaskedStartCharactersBeforeAt: 1,
+    unmaskedEndCharactersAfterAt: 0,
+    maskAtTheRate: false
+  };
 
 // Il s'agit d'une fonction asynchrone qui renvoie une Promise dans laquelle nous recevons le hash généré
 
@@ -19,10 +30,11 @@ require('dotenv').config();
 
 //Middleware pour l'inscription d'un utilisateur
 exports.signup = (req, res, next) => {
+    const maskedEmail = MaskData.maskEmail2(req.body.email, emailMask2Options);
     bcrypt.hash(req.body.password, 10)
         .then(hash => {
             const user = new User({
-                email: req.body.email,
+                email: maskedEmail,
                 password: hash
             });
             user.save((err, user) => {
@@ -42,7 +54,8 @@ exports.signup = (req, res, next) => {
 
 //Middleware pour la connexion d'un utilisateur
 exports.login = (req, res, next) => {
-    User.findOne({ email: req.body.email })
+    const maskedEmail = MaskData.maskEmail2(req.body.email, emailMask2Options);
+    User.findOne({ email: maskedEmail })
         .then(user => {
             if (!user) {
                 return res.status(401).json({ error: 'Utilisateur non trouvé !' });

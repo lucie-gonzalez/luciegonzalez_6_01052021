@@ -12,6 +12,9 @@ const mongoose = require('mongoose');
 // Donne accès au chemin de notre système de fichier
 const path = require('path'); 
 
+//import de maskdata qui va masquer le mail dans la base de donnée
+const MaskData = require('maskdata');
+
 // Installation de Helmet qui configure de manière appropriée des en-têtes HTTP liés à la sécurité
 const helmet = require('helmet'); 
 
