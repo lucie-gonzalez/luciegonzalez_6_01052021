@@ -35,3 +35,11 @@ Si les packages sont déja installés, ces commandes suffisent à démarrer les 
 
 
 Pour s'inscrire sur l'application, l'utilisateur doit fournir un email et un mot de passe.
+
+=====> module avec versions antérieurs  
+
+ * node utilisé     14.16.1
+ * node-sass        4.14.1
+ * Express-mongo    2.0.2
+ * mongoose         5.12.7
+ 
