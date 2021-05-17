@@ -2,14 +2,17 @@
 //avec la BDD MongoDB
 const mongoose = require('mongoose');
 
+// Import de notre middelware qui va aider à sécuriser contre l'injection de code lors de la création et modification des sauces.
+const validateSauce = require('../middleware/validateSauce');
+
 // creation d un schéma de données 
 
 const sauceSchema = mongoose.Schema({
     userId: { type: String, required: true },
-    name: { type: String, required: true },
-    manufacturer: { type: String, required: true },
-    description: { type: String, required: true },
-    mainPepper: { type: String, required: true },
+    name: {type: String, required: true, validate : validateSauce.nameValidator },
+    manufacturer: {type: String, required: true,  validate : validateSauce.manufacturerValidator },
+    description: {type: String, required: true,  validate : validateSauce.descriptionValidator },
+    mainPepper: {type: String, required: true,  validate : validateSauce.mainPepperValidator },
     imageUrl: { type: String, required: true},
     heat: { type: Number, required: true},
     likes: { type: Number, default: 0}, 

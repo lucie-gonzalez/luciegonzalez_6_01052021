@@ -7,21 +7,21 @@ const bcrypt = require('bcrypt');
 //pour chaque utilisateur connecté et authentifié
 const jwt = require('jsonwebtoken');
 
-//import de maskdata qui va masquer le mail dans la base de donnée
-const MaskData = require('maskdata');
+////////Importation du package de cryptage des emails/////////
+var CryptoJS = require("crypto-js");
 
 //Import du modèle user
 const User = require('../models/User');
 
+////////Importation du package de validation des emails/////////
+const validator = require("validator");
+
+
+
+
+
 require('dotenv').config();
 
-//masquage e-mail
-const emailMask2Options = {
-    maskWith: "*", 
-    unmaskedStartCharactersBeforeAt: 1,
-    unmaskedEndCharactersAfterAt: 0,
-    maskAtTheRate: false
-  };
 
 // Il s'agit d'une fonction asynchrone qui renvoie une Promise dans laquelle nous recevons le hash généré
 
@@ -30,13 +30,18 @@ const emailMask2Options = {
 
 //Middleware pour l'inscription d'un utilisateur
 exports.signup = (req, res, next) => {
-    const maskedEmail = MaskData.maskEmail2(req.body.email, emailMask2Options);
+    var email = CryptoJS.AES.encrypt(req.body.email, "mailsecret").toString();
+    //Validation de l'email
+    if (validator.isEmail(req.body.email) !== true) {
+        return res.status(401).json({error: "Email non valide"});
+    
+}
     bcrypt.hash(req.body.password, 10)
         .then(hash => {
             const user = new User({
-                email: maskedEmail,
+                email: email,
                 password: hash
-            });
+            }); 
             user.save((err, user) => {
                 if (err) {
                     return res.status(500).json({ error: err });
@@ -53,9 +58,9 @@ exports.signup = (req, res, next) => {
 
 
 //Middleware pour la connexion d'un utilisateur
-exports.login = (req, res, next) => {
-    const maskedEmail = MaskData.maskEmail2(req.body.email, emailMask2Options);
-    User.findOne({ email: maskedEmail })
+exports.login = (req, res, next) => { 
+    var email = CryptoJS.AES.encrypt(req.body.email, "mailsecret").toString();
+    User.findOne({ email})
         .then(user => {
             if (!user) {
                 return res.status(401).json({ error: 'Utilisateur non trouvé !' });
